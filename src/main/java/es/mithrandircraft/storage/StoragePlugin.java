@@ -4,9 +4,12 @@ import java.io.File;
 import java.util.logging.Level;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import es.mithrandircraft.storage.command.OpenStorageCommand;
+import es.mithrandircraft.storage.listener.StorageInteractListener;
 
 /**
  * plugin's main class
@@ -15,15 +18,19 @@ import es.mithrandircraft.storage.command.OpenStorageCommand;
  *
  */
 public class StoragePlugin extends JavaPlugin implements Storage {
+	
+	Listener storageInteractLister;
 
 	@Override
 	public void onEnable() {
 		this.chargeConfiguration();
 		this.getCommand("sopen").setExecutor(new OpenStorageCommand(this));
+		this.getServer().getPluginManager().registerEvents(new StorageInteractListener(this), this);
 	}
 
 	@Override
 	public void onDisable() {
+		HandlerList.unregisterAll(this);
 	}
 
 	@Override

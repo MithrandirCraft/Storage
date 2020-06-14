@@ -15,6 +15,7 @@ import org.bukkit.inventory.Inventory;
 import es.mithrandircraft.storage.Storage;
 import es.mithrandircraft.storage.configuration.PluginLanguaje;
 import es.mithrandircraft.storage.configuration.PluginLanguaje.LanguajeProperty;
+import es.mithrandircraft.storage.other.StorageHolder;
 
 /**
  * This command executor make that the player open the inventory. This command
@@ -55,7 +56,8 @@ public class OpenStorageCommand extends StorageCommand implements CommandExecuto
 				// Create the inventory o read and existent inventory
 				Inventory inventory = inventories.get(player.getName());
 				if (inventory == null) {
-					inventory = Bukkit.createInventory(player, 9, languaje.getMessage(LanguajeProperty.STORAGE_NAME));
+					inventory = Bukkit.createInventory(new StorageHolder(), 27,
+							languaje.getMessage(LanguajeProperty.STORAGE_NAME));
 					inventories.put(player.getName(), inventory);
 				}
 				player.openInventory(inventory);
