@@ -14,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 
 import es.mithrandircraft.storage.Storage;
 import es.mithrandircraft.storage.configuration.PluginLanguaje;
+import es.mithrandircraft.storage.configuration.PluginLanguaje.LanguajeProperty;
 
 /**
  * This command executor make that the player open the inventory. This command
@@ -22,9 +23,9 @@ import es.mithrandircraft.storage.configuration.PluginLanguaje;
  * @author andrescol24
  *
  */
-public class MakeOpenStorageCommand extends StorageCommand implements CommandExecutor, TabCompleter {
+public class OpenStorageCommand extends StorageCommand implements CommandExecutor, TabCompleter {
 
-	public MakeOpenStorageCommand(Storage plugin) {
+	public OpenStorageCommand(Storage plugin) {
 		super(plugin);
 		this.inventories = new HashMap<>();
 	}
@@ -37,25 +38,24 @@ public class MakeOpenStorageCommand extends StorageCommand implements CommandExe
 		// Checking permission or argumment 2 null or empty
 		if (sender.hasPermission(command.getPermission())) {
 			PluginLanguaje languaje = PluginLanguaje.getInstance(plugin);
-			
+
 			String name = this.getArgument(0, arguments);
 			// Incorrect usage
 			if (name == null) {
-				String message = languaje.formatMessage(command.getUsage());
-				this.sendMessage(sender, message);
+				this.sendMessage(sender, command.getUsage());
 				return true;
 			}
 
 			Player player = Bukkit.getPlayer(name);
 			// if the player is offline
 			if (player == null) {
-				String message = languaje.getMessage("makeopenstorage.notfound", name);
+				String message = languaje.getMessage(LanguajeProperty.OPEN_PLAYER_NOTFOUND, name);
 				this.sendMessage(sender, message);
 			} else {
 				// Create the inventory o read and existent inventory
 				Inventory inventory = inventories.get(player.getName());
 				if (inventory == null) {
-					inventory = Bukkit.createInventory(player, 9, languaje.getString("storage.name"));
+					inventory = Bukkit.createInventory(player, 9, languaje.getMessage(LanguajeProperty.STORAGE_NAME));
 					inventories.put(player.getName(), inventory);
 				}
 				player.openInventory(inventory);

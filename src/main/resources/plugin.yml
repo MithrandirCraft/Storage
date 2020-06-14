@@ -6,18 +6,12 @@ author: [xX_andrescol_Xx]
 api-version: 1.15
 website: www.mithrandircraft.es
 commands:
-  makeopenstorage: 
+  sopen: 
     description: Open the storage 
     permission-message: '[Storage] You dont haver permission for this command'
     permission: storage.open.other
-    usage: Incorrect usage, try /makeopenstorage <player>
-  openstorage: 
-    description: Open the storage 
-    permission-message: '[Storage] You dont haver permission for this command'
-    permission: storage.open
-    usage: /openstorage
+    usage: Incorrect usage, try /sopen <player>
 permissions: 
-  storage.open: {description: Allow open command, default: op}
-  storage.open.other: {description: Allow to open other players storage, default: op}
+  storage.sopen: {description: Allow to open other players storage, default: op}
       
     

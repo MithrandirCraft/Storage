@@ -24,7 +24,7 @@ import es.mithrandircraft.storage.Storage;
 
 public class PluginLanguaje {
 
-	private Properties properties;
+	private Storage plugin;
 
 	/**
 	 * Create the instance
@@ -32,25 +32,7 @@ public class PluginLanguaje {
 	 * @param plugin
 	 */
 	private PluginLanguaje(Storage plugin) {
-		properties = new Properties();
-		File langFile = new File(plugin.getPluginFolder(), "lang.properties");
-		try (InputStream input = new FileInputStream(langFile)) {
-			properties.load(new InputStreamReader(input, StandardCharsets.UTF_8));
-		} catch (IOException e) {
-			plugin.error("Can not load the languaje", e);
-		}
-	}
-
-	/**
-	 * Return a complete message applying the format
-	 * 
-	 * @param message message
-	 * @return Message with the format
-	 */
-	public String formatMessage(String message) {
-		String prefix = properties.getProperty("prefix");
-		message = prefix + message;
-		return ChatColor.translateAlternateColorCodes('&', message);
+		this.plugin = plugin;
 	}
 
 	/**
@@ -59,23 +41,38 @@ public class PluginLanguaje {
 	 * @param key key of the propertie
 	 * @return property
 	 */
-	public String getString(String key) {
-		return ChatColor.translateAlternateColorCodes('&', properties.getProperty(key));
+	private String getString(String key) {
+		Properties properties = new Properties();
+		File langFile = new File(plugin.getPluginFolder(), "lang.properties");
+		try (InputStream input = new FileInputStream(langFile)) {
+			properties.load(new InputStreamReader(input, StandardCharsets.UTF_8));
+			return properties.getProperty(key);
+		} catch (IOException e) {
+			plugin.error("Can not load the languaje property: " + key, e);
+		}
+		return null;
 	}
 
 	/**
 	 * Get a complete message replacing the parameters
 	 * 
-	 * @param key          Key of the property
+	 * @param property     the property
 	 * @param replacements arguments
 	 * @return Message
 	 */
-	public String getMessage(String key, Object... replacements) {
-		String message = this.formatMessage(this.getString(key));
-		for (Object replace : replacements) {
-			message = message.replaceFirst("\\{\\}", replace.toString());
+	public String getMessage(LanguajeProperty property, Object... replacements) {
+		String key = property.getKey();
+		String message = this.getString(key);
+		if (message != null) {
+			for (Object replace : replacements) {
+				message = message.replaceFirst("\\{\\}", replace.toString());
+			}
+			message = ChatColor.translateAlternateColorCodes('&', message);
+			return message;
 		}
-		return message;
+		plugin.warn("The propertiy " + key + " was not found, check it!");
+		return "Please check the " + key + " languaje configuration";
+
 	}
 
 	// ============================ STATICS ===========================
@@ -87,5 +84,19 @@ public class PluginLanguaje {
 			instance = new PluginLanguaje(plugin);
 		}
 		return instance;
+	}
+
+	/**
+	 * Enum for the list of messages
+	 * 
+	 * @author andrescol24
+	 *
+	 */
+	public enum LanguajeProperty {
+		OPEN_PLAYER_NOTFOUND, STORAGE_NAME;
+
+		public String getKey() {
+			return this.name().replace("_", ".").toLowerCase();
+		}
 	}
 }

@@ -6,9 +6,7 @@ import java.util.logging.Level;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import es.mithrandircraft.storage.command.MakeOpenStorageCommand;
-import es.mithrandircraft.storage.configuration.PluginConfiguration;
-import es.mithrandircraft.storage.configuration.PluginLanguaje;
+import es.mithrandircraft.storage.command.OpenStorageCommand;
 
 /**
  * plugin's main class
@@ -21,8 +19,7 @@ public class StoragePlugin extends JavaPlugin implements Storage {
 	@Override
 	public void onEnable() {
 		this.chargeConfiguration();
-		this.getCommand("makeopenstorage").setExecutor(new MakeOpenStorageCommand(this));
-		this.initialLog();
+		this.getCommand("sopen").setExecutor(new OpenStorageCommand(this));
 	}
 
 	@Override
@@ -73,15 +70,5 @@ public class StoragePlugin extends JavaPlugin implements Storage {
 		} catch (Exception e) {
 			this.error("Can not load the configuration", e);
 		}
-	}
-
-	/**
-	 * First log that test the configuration and laguaje
-	 */
-	private void initialLog() {
-		PluginConfiguration configuration = PluginConfiguration.getInstance(this);
-		PluginLanguaje languaje = PluginLanguaje.getInstance(this);
-		String message = languaje.getMessage("initial.message", configuration.getVersion());
-		this.log(message);
 	}
 }
