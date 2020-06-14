@@ -1,0 +1,17 @@
+name: Storage
+version: 1.0.0 
+main: es.mithrandircraft.storage.StoragePlugin
+description: With this plugin you can save items in a SQLite or MySQL Database for each player
+author: [xX_andrescol_Xx]
+api-version: 1.15
+website: www.mithrandircraft.es
+commands:
+  openstorage: 
+    description: Open the storage 
+    permission-message: '[Storage] You dont haver permission for this command'
+    permission: storage.open 
+permissions: 
+  storage.open: {description: Allow open command, default: op}
+  storage.open.other: {description: Allow to open other players storage, default: op}
+      
+    
