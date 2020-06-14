@@ -14,6 +14,7 @@ public class PluginConfiguration {
 
 	// Configuration
 	private String version;
+	private String storagePath;
 
 	/**
 	 * Create the instance for the configuration
@@ -26,6 +27,10 @@ public class PluginConfiguration {
 
 	public String getVersion() {
 		return version;
+	}	
+
+	public String getStoragePath() {
+		return storagePath;
 	}
 
 	/**
@@ -36,6 +41,7 @@ public class PluginConfiguration {
 	private void loadConfiguration(Storage plugin) {
 		FileConfiguration configFile = plugin.getFileConfiguration();
 		this.version = configFile.getString("version");
+		this.storagePath = configFile.getString("storage-path");
 	}
 
 	// ===================== STATICS ================================

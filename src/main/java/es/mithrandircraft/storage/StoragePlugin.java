@@ -9,7 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import es.mithrandircraft.storage.command.OpenStorageCommand;
-import es.mithrandircraft.storage.listener.StorageInteractListener;
+import es.mithrandircraft.storage.configuration.PluginLanguaje;
+import es.mithrandircraft.storage.eventhandler.StorageInteractListener;
 
 /**
  * plugin's main class
@@ -34,18 +35,21 @@ public class StoragePlugin extends JavaPlugin implements Storage {
 	}
 
 	@Override
-	public void log(String message) {
+	public void info(String message, Object... replacements) {
+		message = PluginLanguaje.replaceValues(message, replacements);
 		this.getLogger().info(message);
 	}
 
 	@Override
-	public void warn(String message) {
+	public void warn(String message, Object... replacements) {
+		message = PluginLanguaje.replaceValues(message, replacements);
 		this.getLogger().warning(message);
 
 	}
 
 	@Override
-	public void error(String message, Throwable exception) {
+	public void error(String message, Throwable exception, Object... replacements) {
+		message = PluginLanguaje.replaceValues(message, replacements);
 		this.getLogger().log(Level.SEVERE, message, exception);
 
 	}

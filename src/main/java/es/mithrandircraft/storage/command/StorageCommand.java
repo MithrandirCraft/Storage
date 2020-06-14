@@ -43,7 +43,7 @@ public abstract class StorageCommand implements CommandExecutor {
 		if(sender instanceof Player) {
 			sender.sendMessage(msg);
 		} else {
-			plugin.log(msg);
+			plugin.info(msg);
 		}
 	}
 }

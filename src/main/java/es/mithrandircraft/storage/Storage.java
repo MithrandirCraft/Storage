@@ -17,14 +17,14 @@ public interface Storage {
 	 * 
 	 * @param message the message
 	 */
-	void log(String message);
+	void info(String message, Object... replacements);
 
 	/**
 	 * Write a console warning message
 	 * 
 	 * @param message Message to write
 	 */
-	void warn(String message);
+	void warn(String message, Object... replacements);
 
 	/**
 	 * Write a severe error to console
@@ -32,7 +32,7 @@ public interface Storage {
 	 * @param message   Message
 	 * @param exception the throws exception
 	 */
-	void error(String message, Throwable exception);
+	void error(String message, Throwable exception, Object... replacements);
 
 	/**
 	 * Get the file configuration

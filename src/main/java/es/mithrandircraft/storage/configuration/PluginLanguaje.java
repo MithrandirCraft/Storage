@@ -64,14 +64,13 @@ public class PluginLanguaje {
 		String key = property.getKey();
 		String message = this.getString(key);
 		if (message != null) {
-			for (Object replace : replacements) {
-				message = message.replaceFirst("\\{\\}", replace.toString());
-			}
+			message = replaceValues(message, replacements);
 			message = ChatColor.translateAlternateColorCodes('&', message);
 			return message;
 		}
-		plugin.warn("The propertiy " + key + " was not found, check it!");
-		return "Please check the " + key + " languaje configuration";
+		message = replaceValues("Please check the {} languaje configuration", replacements);
+		plugin.warn(message);
+		return message;
 
 	}
 
@@ -98,5 +97,19 @@ public class PluginLanguaje {
 		public String getKey() {
 			return this.name().replace("_", ".").toLowerCase();
 		}
+	}
+
+	/**
+	 * Replace all {} values
+	 * 
+	 * @param message      message
+	 * @param replacements replacements
+	 * @return String values replaced
+	 */
+	public static String replaceValues(String message, Object... replacements) {
+		for (Object replace : replacements) {
+			message = message.replaceFirst("\\{\\}", replace.toString());
+		}
+		return message;
 	}
 }

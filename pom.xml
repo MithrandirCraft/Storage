@@ -15,24 +15,29 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-api</artifactId>
-			<version>1.15-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
+		<!-- Spogit API and javadocs -->
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
 			<version>1.15.2-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- Data -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.6</version>
+		</dependency>
+
+		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 	<repositories>

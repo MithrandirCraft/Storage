@@ -1,7 +1,6 @@
-package es.mithrandircraft.storage.listener;
+package es.mithrandircraft.storage.eventhandler;
 
-import java.util.Arrays;
-
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -10,7 +9,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 import es.mithrandircraft.storage.Storage;
-import es.mithrandircraft.storage.other.StorageHolder;
+import es.mithrandircraft.storage.StorageHolder;
+import es.mithrandircraft.storage.data.JsonDataManager;
+import es.mithrandircraft.storage.data.StorageContent;
 
 /**
  * Listener for the inventories interaction. It validate if the invetory is a
@@ -43,7 +44,16 @@ public class StorageInteractListener implements Listener {
 		Inventory inventory = event.getInventory();
 		InventoryHolder holder = inventory.getHolder();
 		if (holder instanceof StorageHolder) {
-			plugin.log("Yeah!! hashCode: " + Arrays.hashCode(event.getInventory().getContents()));
+			// Save the content
+			HumanEntity player = event.getPlayer();
+			JsonDataManager dataManager = JsonDataManager.getInstance(plugin);
+			StorageContent savedContent = dataManager.get(player);
+
+			// If the content has changet, save it
+			if (savedContent.hasChanged(inventory)) {
+				savedContent.setContent(inventory.getContents());
+				dataManager.put(player, savedContent);
+			}
 		}
 	}
 }

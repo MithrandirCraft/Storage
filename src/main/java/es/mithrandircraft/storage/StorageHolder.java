@@ -1,4 +1,4 @@
-package es.mithrandircraft.storage.other;
+package es.mithrandircraft.storage;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;

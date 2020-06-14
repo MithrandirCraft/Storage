@@ -1,6 +1,5 @@
 package es.mithrandircraft.storage.command;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,9 +12,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import es.mithrandircraft.storage.Storage;
+import es.mithrandircraft.storage.StorageHolder;
 import es.mithrandircraft.storage.configuration.PluginLanguaje;
 import es.mithrandircraft.storage.configuration.PluginLanguaje.LanguajeProperty;
-import es.mithrandircraft.storage.other.StorageHolder;
+import es.mithrandircraft.storage.data.JsonDataManager;
+import es.mithrandircraft.storage.data.StorageContent;
 
 /**
  * This command executor make that the player open the inventory. This command
@@ -28,10 +29,7 @@ public class OpenStorageCommand extends StorageCommand implements CommandExecuto
 
 	public OpenStorageCommand(Storage plugin) {
 		super(plugin);
-		this.inventories = new HashMap<>();
 	}
-
-	private HashMap<String, Inventory> inventories;
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String argumment2, String[] arguments) {
@@ -53,12 +51,13 @@ public class OpenStorageCommand extends StorageCommand implements CommandExecuto
 				String message = languaje.getMessage(LanguajeProperty.OPEN_PLAYER_NOTFOUND, name);
 				this.sendMessage(sender, message);
 			} else {
-				// Create the inventory o read and existent inventory
-				Inventory inventory = inventories.get(player.getName());
-				if (inventory == null) {
-					inventory = Bukkit.createInventory(new StorageHolder(), 27,
-							languaje.getMessage(LanguajeProperty.STORAGE_NAME));
-					inventories.put(player.getName(), inventory);
+				// Read the playerStorage (content)
+				JsonDataManager dataManager = JsonDataManager.getInstance(plugin);
+				StorageContent content = dataManager.get(player);
+				Inventory inventory = Bukkit.createInventory(new StorageHolder(), 27,
+						languaje.getMessage(LanguajeProperty.STORAGE_NAME));
+				if (content.getContent() != null) {
+					inventory.setContents(content.getContent());
 				}
 				player.openInventory(inventory);
 			}
