@@ -12,7 +12,6 @@ import es.mithrandircraft.storage.configuration.PluginConfiguration;
 
 public class YamlDataManager {
 
-	private File location;
 	private Storage plugin;
 
 	/**
@@ -21,16 +20,7 @@ public class YamlDataManager {
 	 * @param plugin plugin
 	 */
 	private YamlDataManager(Storage plugin) {
-		PluginConfiguration configuration = PluginConfiguration.getInstance(plugin);
-		String path = configuration.getStoragePath().replace("PLUGIN_DATA_FOLDER", plugin.getPluginFolder().getPath());
-		this.location = new File(path);
-		this.plugin = plugin;
-		if (!this.location.exists()) {
-			boolean created = this.location.mkdir();
-			if (created) {
-				this.plugin.info("The Storage dir was created in {}", this.location.getAbsolutePath());
-			}
-		}
+		this.plugin = plugin;	
 	}
 
 	/**
@@ -39,7 +29,8 @@ public class YamlDataManager {
 	 * @param storage Storage
 	 */
 	public boolean put(HumanEntity player, StorageContent storage) {
-		File playerFile = new File(this.location, player.getUniqueId() + ".yml");
+		File location = this.getLocation();
+		File playerFile = new File(location, player.getUniqueId() + ".yml");
 		try {
 			YamlConfiguration yaml = storage.toYaml();
 			yaml.save(playerFile);
@@ -57,7 +48,8 @@ public class YamlDataManager {
 	 * @return the playerStorage or null if not exist
 	 */
 	public StorageContent get(HumanEntity player) {
-		File playerFile = new File(this.location, player.getUniqueId() + ".yml");
+		File location = this.getLocation();
+		File playerFile = new File(location, player.getUniqueId() + ".yml");
 		if (playerFile.exists()) {
 			try {
 				YamlConfiguration yaml = new YamlConfiguration();
@@ -68,6 +60,19 @@ public class YamlDataManager {
 			}
 		}
 		return new StorageContent(player);
+	}
+	
+	private File getLocation() {
+		PluginConfiguration configuration = PluginConfiguration.getInstance(plugin);
+		String path = configuration.getStoragePath().replace("PLUGIN_DATA_FOLDER", plugin.getPluginFolder().getPath());
+		File location = new File(path);
+		if (!location.exists()) {
+			boolean created = location.mkdir();
+			if (created) {
+				this.plugin.info("The Storage dir was created in {}", location.getAbsolutePath());
+			}
+		}
+		return location;
 	}
 
 	// ===================== STATICS =================================

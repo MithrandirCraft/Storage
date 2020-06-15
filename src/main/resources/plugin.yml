@@ -10,8 +10,9 @@ commands:
     description: Open the storage 
     permission-message: '[Storage] You dont haver permission for this command'
     permission: storage.open.other
-    usage: Incorrect usage, try /sopen <player>
+    usage: Incorrect usage, try /sopen <reload|player>
 permissions: 
   storage.sopen: {description: Allow to open other players storage, default: op}
+  storage.reloadconfig: {description: Allow to reload the configuration, default: op}
       
     

@@ -68,8 +68,7 @@ public class PluginLanguaje {
 			message = ChatColor.translateAlternateColorCodes('&', message);
 			return message;
 		}
-		message = replaceValues("Please check the {} languaje configuration", replacements);
-		plugin.warn(message);
+		message = replaceValues("Please check the {} languaje configuration", key);
 		return message;
 
 	}
@@ -92,7 +91,7 @@ public class PluginLanguaje {
 	 *
 	 */
 	public enum LanguajeProperty {
-		OPEN_PLAYER_NOTFOUND, STORAGE_NAME;
+		OPEN_PLAYER_NOTFOUND, STORAGE_NAME, CONFIG_RELOADED;
 
 		public String getKey() {
 			return this.name().replace("_", ".").toLowerCase();

@@ -47,4 +47,9 @@ public interface Storage {
 	 * @return Plugin's folder
 	 */
 	File getPluginFolder();
+
+	/**
+	 * Reload the configuration
+	 */
+	void reloadConfig();
 }

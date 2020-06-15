@@ -13,6 +13,7 @@ import org.bukkit.inventory.Inventory;
 
 import es.mithrandircraft.storage.Storage;
 import es.mithrandircraft.storage.StorageHolder;
+import es.mithrandircraft.storage.configuration.PluginConfiguration;
 import es.mithrandircraft.storage.configuration.PluginLanguaje;
 import es.mithrandircraft.storage.configuration.PluginLanguaje.LanguajeProperty;
 import es.mithrandircraft.storage.data.YamlDataManager;
@@ -44,6 +45,13 @@ public class OpenStorageCommand extends StorageCommand implements CommandExecuto
 				this.sendMessage(sender, command.getUsage());
 				return true;
 			}
+			
+			// Reload configuration
+			if(name.equals("reload") && sender.hasPermission("storage.reloadconfig")) {
+				PluginConfiguration.getInstance(plugin).reloadConfig();
+				this.sendMessage(sender, languaje.getMessage(LanguajeProperty.CONFIG_RELOADED));
+				return true;
+			}
 
 			Player player = Bukkit.getPlayer(name);
 			// if the player is offline
@@ -68,9 +76,13 @@ public class OpenStorageCommand extends StorageCommand implements CommandExecuto
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		List<String> names = new LinkedList<>();
-		Bukkit.getOnlinePlayers().forEach(player -> names.add(player.getName()));
-		return names;
+		List<String> parameters = new LinkedList<>();
+		String first = this.getArgument(0, args);
+		if(first != null && first.startsWith("r")) {
+			parameters.add("reload");
+		}
+		Bukkit.getOnlinePlayers().forEach(player -> parameters.add(player.getName()));
+		return parameters;
 	}
 
 }

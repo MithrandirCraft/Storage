@@ -1,4 +1,4 @@
 version: 1.0.0
 
-# PLUGIN_DATA_FORLDER means plugins/Storaga/. Replace for your custom location
+# PLUGIN_DATA_FOLDER means plugins/Storaga/. Replace for your custom location
 storage-path: PLUGIN_DATA_FOLDER/storages 

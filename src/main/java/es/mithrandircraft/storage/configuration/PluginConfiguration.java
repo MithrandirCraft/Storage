@@ -15,6 +15,8 @@ public class PluginConfiguration {
 	// Configuration
 	private String version;
 	private String storagePath;
+	
+	private final Storage plugin;
 
 	/**
 	 * Create the instance for the configuration
@@ -22,12 +24,13 @@ public class PluginConfiguration {
 	 * @param plugin
 	 */
 	private PluginConfiguration(Storage plugin) {
+		this.plugin = plugin;
 		this.loadConfiguration(plugin);
 	}
 
 	public String getVersion() {
 		return version;
-	}	
+	}
 
 	public String getStoragePath() {
 		return storagePath;
@@ -45,7 +48,7 @@ public class PluginConfiguration {
 	}
 
 	// ===================== STATICS ================================
-	
+
 	private static PluginConfiguration instance;
 
 	/**
@@ -59,6 +62,14 @@ public class PluginConfiguration {
 			instance = new PluginConfiguration(plugin);
 		}
 		return instance;
+	}
+
+	/**
+	 * Reload the configuration
+	 */
+	public void reloadConfig() {
+		this.plugin.reloadConfig();
+		this.loadConfiguration(this.plugin);
 	}
 
 }

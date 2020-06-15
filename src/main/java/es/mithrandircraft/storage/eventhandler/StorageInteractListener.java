@@ -51,7 +51,6 @@ public class StorageInteractListener implements Listener {
 
 			// If the content has changet, save it
 			if (savedContent.hasChanged(inventory)) {
-				this.plugin.info("Se guarda");
 				savedContent.setContent(inventory.getContents());
 				dataManager.put(player, savedContent);
 			}
