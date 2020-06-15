@@ -1,8 +1,10 @@
 package es.mithrandircraft.storage.data;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -44,6 +46,18 @@ public class StorageContent {
 		this.uuid = player.getUniqueId();
 	}
 
+	public StorageContent(YamlConfiguration yaml) {
+		this.name = yaml.getString("name");
+		this.uuid = UUID.fromString(yaml.getString("uuid"));
+		List<?> list = yaml.getList("content");
+		ItemStack[] inventory = new ItemStack[list.size()];
+		for(int i = 0; i < list.size(); i++) {
+			Object aux = list.get(i);
+			inventory[i] = aux == null ? null : (ItemStack) aux;
+		}
+		this.content = inventory;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -73,5 +87,14 @@ public class StorageContent {
 	 */
 	public boolean hasChanged(Inventory inventory) {
 		return this.hashCode != Arrays.hashCode(inventory.getContents());
+	}
+	
+	public YamlConfiguration toYaml() {
+		YamlConfiguration yaml = new YamlConfiguration();
+		yaml.set("name", this.name);
+		yaml.set("uuid", this.uuid.toString());
+		yaml.set("hashCode", this.hashCode);
+		yaml.set("content", this.content);
+		return yaml;
 	}
 }

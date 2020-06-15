@@ -108,7 +108,7 @@ public class PluginLanguaje {
 	 */
 	public static String replaceValues(String message, Object... replacements) {
 		for (Object replace : replacements) {
-			message = message.replaceFirst("\\{\\}", replace.toString());
+			message = message.replaceFirst("\\{\\}", String.valueOf(replace));
 		}
 		return message;
 	}

@@ -1,21 +1,16 @@
 package es.mithrandircraft.storage.data;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonIOException;
 
 import es.mithrandircraft.storage.Storage;
 import es.mithrandircraft.storage.configuration.PluginConfiguration;
 
-public class JsonDataManager {
+public class YamlDataManager {
 
 	private File location;
 	private Storage plugin;
@@ -25,7 +20,7 @@ public class JsonDataManager {
 	 * 
 	 * @param plugin plugin
 	 */
-	private JsonDataManager(Storage plugin) {
+	private YamlDataManager(Storage plugin) {
 		PluginConfiguration configuration = PluginConfiguration.getInstance(plugin);
 		String path = configuration.getStoragePath().replace("PLUGIN_DATA_FOLDER", plugin.getPluginFolder().getPath());
 		this.location = new File(path);
@@ -44,15 +39,12 @@ public class JsonDataManager {
 	 * @param storage Storage
 	 */
 	public boolean put(HumanEntity player, StorageContent storage) {
-		File playerFile = new File(this.location, player.getUniqueId() + ".json");
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		File playerFile = new File(this.location, player.getUniqueId() + ".yml");
 		try {
-			if (playerFile.createNewFile()) {
-				this.plugin.info("DataStorage created for {}", storage.getName());
-			}
-			gson.toJson(storage, new FileWriter(playerFile, false));
+			YamlConfiguration yaml = storage.toYaml();
+			yaml.save(playerFile);
 			return true;
-		} catch (JsonIOException | IOException e) {
+		} catch (IOException e) {
 			this.plugin.error("The data of {} cannot be saved", e, storage.getName());
 			return false;
 		}
@@ -65,16 +57,13 @@ public class JsonDataManager {
 	 * @return the playerStorage or null if not exist
 	 */
 	public StorageContent get(HumanEntity player) {
-		File playerFile = new File(this.location, player.getUniqueId() + ".json");
+		File playerFile = new File(this.location, player.getUniqueId() + ".yml");
 		if (playerFile.exists()) {
-			try (BufferedReader bf = new BufferedReader(new FileReader(playerFile))) {
-				Gson gson = new Gson();
-				StorageContent result = gson.fromJson(bf, StorageContent.class);
-				if (result != null) {
-					return result;
-				}
-				return new StorageContent(player);
-			} catch (IOException e) {
+			try {
+				YamlConfiguration yaml = new YamlConfiguration();
+				yaml.load(playerFile);
+				return new StorageContent(yaml);
+			} catch (IOException | InvalidConfigurationException e) {
 				this.plugin.error("Error reading the {} uuid: {} storage", e, player.getName(), player.getUniqueId());
 			}
 		}
@@ -82,11 +71,11 @@ public class JsonDataManager {
 	}
 
 	// ===================== STATICS =================================
-	private static JsonDataManager instance;
+	private static YamlDataManager instance;
 
-	public static JsonDataManager getInstance(Storage plugin) {
+	public static YamlDataManager getInstance(Storage plugin) {
 		if (instance == null) {
-			instance = new JsonDataManager(plugin);
+			instance = new YamlDataManager(plugin);
 		}
 		return instance;
 	}

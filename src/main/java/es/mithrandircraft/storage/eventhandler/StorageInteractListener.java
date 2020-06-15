@@ -1,5 +1,7 @@
 package es.mithrandircraft.storage.eventhandler;
 
+import java.util.Arrays;
+
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -10,7 +12,7 @@ import org.bukkit.inventory.InventoryHolder;
 
 import es.mithrandircraft.storage.Storage;
 import es.mithrandircraft.storage.StorageHolder;
-import es.mithrandircraft.storage.data.JsonDataManager;
+import es.mithrandircraft.storage.data.YamlDataManager;
 import es.mithrandircraft.storage.data.StorageContent;
 
 /**
@@ -46,10 +48,11 @@ public class StorageInteractListener implements Listener {
 		if (holder instanceof StorageHolder) {
 			// Save the content
 			HumanEntity player = event.getPlayer();
-			JsonDataManager dataManager = JsonDataManager.getInstance(plugin);
+			YamlDataManager dataManager = YamlDataManager.getInstance(plugin);
 			StorageContent savedContent = dataManager.get(player);
 
 			// If the content has changet, save it
+			this.plugin.info("saved hash {} vs this {}", savedContent.getHashCode(), Arrays.hashCode(inventory.getContents()));
 			if (savedContent.hasChanged(inventory)) {
 				savedContent.setContent(inventory.getContents());
 				dataManager.put(player, savedContent);

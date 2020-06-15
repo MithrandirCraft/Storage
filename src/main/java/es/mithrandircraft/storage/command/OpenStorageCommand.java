@@ -15,7 +15,7 @@ import es.mithrandircraft.storage.Storage;
 import es.mithrandircraft.storage.StorageHolder;
 import es.mithrandircraft.storage.configuration.PluginLanguaje;
 import es.mithrandircraft.storage.configuration.PluginLanguaje.LanguajeProperty;
-import es.mithrandircraft.storage.data.JsonDataManager;
+import es.mithrandircraft.storage.data.YamlDataManager;
 import es.mithrandircraft.storage.data.StorageContent;
 
 /**
@@ -52,7 +52,7 @@ public class OpenStorageCommand extends StorageCommand implements CommandExecuto
 				this.sendMessage(sender, message);
 			} else {
 				// Read the playerStorage (content)
-				JsonDataManager dataManager = JsonDataManager.getInstance(plugin);
+				YamlDataManager dataManager = YamlDataManager.getInstance(plugin);
 				StorageContent content = dataManager.get(player);
 				Inventory inventory = Bukkit.createInventory(new StorageHolder(), 27,
 						languaje.getMessage(LanguajeProperty.STORAGE_NAME));
