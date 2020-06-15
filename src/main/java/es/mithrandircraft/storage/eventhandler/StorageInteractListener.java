@@ -1,7 +1,5 @@
 package es.mithrandircraft.storage.eventhandler;
 
-import java.util.Arrays;
-
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,8 +10,8 @@ import org.bukkit.inventory.InventoryHolder;
 
 import es.mithrandircraft.storage.Storage;
 import es.mithrandircraft.storage.StorageHolder;
-import es.mithrandircraft.storage.data.YamlDataManager;
 import es.mithrandircraft.storage.data.StorageContent;
+import es.mithrandircraft.storage.data.YamlDataManager;
 
 /**
  * Listener for the inventories interaction. It validate if the invetory is a
@@ -52,8 +50,8 @@ public class StorageInteractListener implements Listener {
 			StorageContent savedContent = dataManager.get(player);
 
 			// If the content has changet, save it
-			this.plugin.info("saved hash {} vs this {}", savedContent.getHashCode(), Arrays.hashCode(inventory.getContents()));
 			if (savedContent.hasChanged(inventory)) {
+				this.plugin.info("Se guarda");
 				savedContent.setContent(inventory.getContents());
 				dataManager.put(player, savedContent);
 			}

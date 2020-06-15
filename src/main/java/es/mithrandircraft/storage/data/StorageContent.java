@@ -49,6 +49,7 @@ public class StorageContent {
 	public StorageContent(YamlConfiguration yaml) {
 		this.name = yaml.getString("name");
 		this.uuid = UUID.fromString(yaml.getString("uuid"));
+		this.hashCode = yaml.getInt("hashCode");
 		List<?> list = yaml.getList("content");
 		ItemStack[] inventory = new ItemStack[list.size()];
 		for(int i = 0; i < list.size(); i++) {
